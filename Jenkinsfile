@@ -1,9 +1,6 @@
 pipeline {
     agent any
 
-    parameters {
-        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
-        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Select the action to perform')
     }
 
     environment {
@@ -15,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/CodeSagarOfficial/jenkins-scripts.git'
+                git branch: 'main', url: 'hhttps://github.com/lakshmandevops5152/terraform.git'
             }
         }
         stage('Terraform init') {
@@ -25,7 +22,7 @@ pipeline {
         }
         stage('Plan') {
             steps {
-                sh 'terraform  apply'
+                sh 'terraform  plan'
                 
             }
         }

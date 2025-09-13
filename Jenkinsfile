@@ -16,36 +16,13 @@ pipeline {
 
         stage('Plan') {
             steps {
-                // Save plan to a file and show it in console
-                sh 'terraform plan -out=tfplan'
-                sh 'terraform show -no-color tfplan'
+                sh 'terraform plan'
             }
         }
 
-        stage('Approval') {
+        stage('Apply / Destroy') {
             steps {
-                script {
-                    // Jenkins pauses here for manual approval in UI
-                    timeout(time: 10, unit: 'MINUTES') {
-                        def userInput = input(
-                            id: 'Proceed1',
-                            message: 'Terraform plan is ready. Do you want to APPLY these changes?',
-                            parameters: [
-                                choice(name: 'CONFIRM', choices: ['No', 'Yes'], description: 'Select Yes to apply changes')
-                            ]
-                        )
-                        if (userInput != 'Yes') {
-                            error("User declined apply. Pipeline stopped.")
-                        }
-                    }
-                }
-            }
-        }
-
-        stage('Apply') {
-            steps {
-                // Apply exactly the saved plan
-                sh 'terraform apply -auto-approve tfplan'
+                sh 'terraform apply -auto-approve'
             }
         }
     }

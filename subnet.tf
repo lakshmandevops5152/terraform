@@ -5,6 +5,7 @@ resource "aws_subnet" "tpni-1" {
   tags = {
     Name = "tpni-1"
   }
+}
 esource "aws_subnet" "tpni-2" {
   vpc_id     = aws_vpc.tpni-1.id
   cidr_block = "10.0.2.0/24"

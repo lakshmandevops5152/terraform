@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        ansiColor('xterm')   // Enable colored console output
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -16,28 +20,13 @@ pipeline {
 
         stage('Plan') {
             steps {
-                // Show full plan in console
-                sh 'terraform plan -no-color'
+                sh 'terraform plan'
             }
         }
 
-        stage('Approve Apply') {
+        stage('Apply / Destroy') {
             steps {
-                script {
-                    // Ask for manual confirmation in Jenkins UI before applying
-                    def userInput = input(
-                        id: 'Proceed1', 
-                        message: 'Do you want to apply these changes?', 
-                        parameters: [
-                            choice(name: 'CONFIRM', choices: 'No\nYes', description: 'Select Yes to apply changes')
-                        ]
-                    )
-                    if (userInput == 'Yes') {
-                        sh 'terraform apply -auto-approve'
-                    } else {
-                        echo "Apply stage skipped by user."
-                    }
-                }
+                sh 'terraform apply'
             }
         }
     }

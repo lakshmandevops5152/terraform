@@ -1,8 +1,24 @@
-resource "aws_subnet" "main" {
-  vpc_id     = aws_vpc.main.id
+resource "aws_subnet" "tpni-1" {
+  vpc_id     = aws_vpc.tpni-1.id
   cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = "Main"
+    Name = "tpni-1"
+  }
+esource "aws_subnet" "tpni-2" {
+  vpc_id     = aws_vpc.tpni-1.id
+  cidr_block = "10.0.2.0/24"
+
+  tags = {
+    Name = "tpni-2"
   }
 }
+esource "aws_subnet" "tpni-3" {
+  vpc_id     = aws_vpc.tpni-1.id
+  cidr_block = "10.0.3.0/24"
+
+  tags = {
+    Name = "tpni-3"
+  }
+}
+

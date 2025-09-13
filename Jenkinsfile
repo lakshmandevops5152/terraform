@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    options {
-        ansiColor('xterm')   // Enable colored console output
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -14,19 +10,25 @@ pipeline {
 
         stage('Terraform init') {
             steps {
-                sh 'terraform init'
+                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+                    sh 'terraform init'
+                }
             }
         }
 
         stage('Plan') {
             steps {
-                sh 'terraform plan'
+                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+                    sh 'terraform plan'
+                }
             }
         }
 
         stage('Apply / Destroy') {
             steps {
-                sh 'terraform apply'
+                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+                    sh 'terraform apply'
+                }
             }
         }
     }

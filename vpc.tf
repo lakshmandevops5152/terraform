@@ -3,6 +3,6 @@ resource "aws_vpc" "tpni" {
   instance_tenancy = "default"
 
   tags = {
-    Name = "main"
+    Name = "tpni"
   }
 }

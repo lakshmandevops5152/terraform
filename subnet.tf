@@ -14,7 +14,7 @@ resource "aws_subnet" "tpni-2" {
     Name = "tpni-2"
   }
 }
-esource "aws_subnet" "tpni-3" {
+resource "aws_subnet" "tpni-3" {
   vpc_id     = aws_vpc.tpni.id
   cidr_block = "10.0.3.0/24"
 

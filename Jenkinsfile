@@ -4,42 +4,30 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', https://github.com/lakshmandevops5152/terraform.git'
-            }
-
-
-        stage('Terraform Init') {
-            steps {
-                echo "Running terraform init..."
-                sh 'terraform init -input=false'
+                git branch: 'main', url: 'https://github.com/lakshmandevops5152/terraform.git'
             }
         }
 
-        stage('Terraform Plan') {
+        stage('Terraform init') {
             steps {
-                echo "Running terraform plan..."
+                sh 'terraform init'
+            }
+        }
+
+        stage('Plan') {
+            steps {
                 sh 'terraform plan'
             }
         }
 
-        stage('Approve Apply?') {
+        stage('Apply / Destroy') {
             steps {
-                script {
-                    def userApproval = input(
-                        message: 'Apply Terraform changes?',
-                        parameters: [
-                            choice(name: 'Approve', choices: 'No\nYes', description: 'Select Yes to apply.')
-                        ]
-                    )
-                    
-                    if (userApproval == 'No') {
-                        echo "User chose not to apply changes."
-                        currentBuild.result = 'ABORTED'
-                        error("Stopping pipeline — apply not approved.")
-                    }
-                }
+                sh 'terraform apply -auto-approve'
             }
         }
+    }
+}
+
 
 
 

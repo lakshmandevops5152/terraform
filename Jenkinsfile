@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main', https://github.com/lakshmandevops5152/terraform.git'
-            }
+            
         }
 
 

@@ -10,25 +10,42 @@ pipeline {
 
         stage('Terraform init') {
             steps {
-                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-                    sh 'terraform init'
-                }
+                sh 'terraform init'
             }
         }
 
         stage('Plan') {
             steps {
-                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-                    sh 'terraform plan'
+                // Save plan to a file and show it in console
+                sh 'terraform plan -out=tfplan'
+                sh 'terraform show -no-color tfplan'
+            }
+        }
+
+        stage('Approval') {
+            steps {
+                script {
+                    // Jenkins pauses here for manual approval in UI
+                    timeout(time: 10, unit: 'MINUTES') {
+                        def userInput = input(
+                            id: 'Proceed1',
+                            message: 'Terraform plan is ready. Do you want to APPLY these changes?',
+                            parameters: [
+                                choice(name: 'CONFIRM', choices: ['No', 'Yes'], description: 'Select Yes to apply changes')
+                            ]
+                        )
+                        if (userInput != 'Yes') {
+                            error("User declined apply. Pipeline stopped.")
+                        }
+                    }
                 }
             }
         }
 
-        stage('Apply / Destroy') {
+        stage('Apply') {
             steps {
-                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-                    sh 'terraform apply'
-                }
+                // Apply exactly the saved plan
+                sh 'terraform apply -auto-approve tfplan'
             }
         }
     }

@@ -1,3 +1,4 @@
+grovy
 pipeline {
     agent any
 
@@ -8,21 +9,21 @@ pipeline {
             }
         }
 
-        stage('Terraform init') {
+        stage('Terraform Init') {
             steps {
                 sh 'terraform init'
             }
         }
 
-        stage('Plan') {
+        stage('Terraform Plan') {
             steps {
-                sh 'terraform plan'
+                sh 'terraform plan -out=tfplan'
             }
         }
 
-        stage('Apply / Destroy') {
+        stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -auto-approve'
+                sh 'terraform apply -auto-approve tfplan'
             }
         }
     }

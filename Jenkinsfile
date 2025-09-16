@@ -1,46 +1,41 @@
 pipeline {
     agent any
 
-    
-
-    
-
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/lakshmandevops5152/terraform.git'
             }
         }
-        stage('Terraform init') {
+
+        stage('Terraform Init') {
             steps {
                 sh 'terraform init'
             }
         }
-        stage('Plan') {
+
+        stage('Terraform Plan') {
             steps {
-                sh 'terraform plan -out tfplan'
-                sh 'terraform show -no-color tfplan > tfplan.txt'
+                // Show full plan in console with colors
+                sh 'terraform plan -no-color -out=tfplan'
+                sh 'terraform show -color tfplan'
             }
         }
-        stage('Apply / Destroy') {
+
+        stage('Approval') {
             steps {
                 script {
-                    if (params.action == 'apply') {
-                        if (!params.autoApprove) {
-                            def plan = readFile 'tfplan.txt'
-                            input message: "Do you want to apply the plan?",
-                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
-                        }
-
-                        sh 'terraform ${action} -input=false tfplan'
-                    } else if (params.action == 'destroy') {
-                        sh 'terraform ${action} --auto-approve'
-                    } else {
-                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
-                    }
+                    // Ask for manual approval
+                    input message: "Do you want to apply these changes?", ok: "Yes, Apply"
                 }
             }
         }
 
+        stage('Terraform Apply') {
+            steps {
+                // Apply only after approval
+                sh 'terraform apply -auto-approve tfplan'
+            }
+        }
     }
 }

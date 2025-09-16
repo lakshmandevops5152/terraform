@@ -17,8 +17,8 @@ pipeline {
         stage('Plan') {
             steps {
                 // Save plan to a file and show it in console
-                sh 'terraform plan -out=tfplan'
-                sh 'terraform show -no-color tfplan'
+                sh 'terraform plan 
+                sh 'terraform show 
             }
         }
 

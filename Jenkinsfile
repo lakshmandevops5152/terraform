@@ -17,8 +17,8 @@ pipeline {
         stage('Plan') {
             steps {
                 // Save plan to a file and show it in console
-                sh 'terraform plan 
-                sh 'terraform show 
+                sh 'terraform plan'
+                
             }
         }
 

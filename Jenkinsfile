@@ -1,52 +1,38 @@
-pipeline {
-    agent any
-
-    stages {
+stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/lakshmandevops5152/terraform.git'
             }
         }
-
         stage('Terraform init') {
             steps {
-                sh 'terraform init -reconfigure'
+                sh 'terraform init'
             }
         }
-
         stage('Plan') {
             steps {
-                // Save plan to a file and show it in console
-                sh 'terraform plan'
+                sh 'terraform  plan'
                 
             }
         }
-
-        stage('Approval') {
+        stage('Apply / Destroy') {
             steps {
                 script {
-                    // Jenkins pauses here for manual approval in UI
-                    timeout(time: 10, unit: 'MINUTES') {
-                        def userInput = input(
-                            id: 'Proceed1',
-                            message: 'Terraform plan is ready. Do you want to APPLY these changes?',
-                            parameters: [
-                                choice(name: 'CONFIRM', choices: ['No', 'Yes'], description: 'Select Yes to apply changes')
-                            ]
-                        )
-                        if (userInput != 'Yes') {
-                            error("User declined apply. Pipeline stopped.")
+                    if (params.action == 'apply') {
+                        if (!params.autoApprove) {
+                            def plan = readFile 'tfplan.txt'
+                            input message: "Do you want to apply the plan?",
+                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                         }
+
+                        sh 'terraform ${action} -input=false tfplan'
+                    } else if (params.action == 'destroy') {
+                        sh 'terraform ${action} --auto-approve'
+                    } else {
+                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
                     }
                 }
             }
         }
 
-        stage('Apply') {
-            steps {
-                // Apply exactly the saved plan
-                sh 'terraform apply -auto-approve tfplan'
-            }
-        }
-    }
-}
+

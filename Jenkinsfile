@@ -10,31 +10,36 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform init'
+                ansiColor('xterm') {
+                    sh 'terraform init'
+                }
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                // Show full plan in console with colors
-                sh 'terraform plan -no-color -out=tfplan'
-                sh 'terraform show -color tfplan'
+                ansiColor('xterm') {
+                    // Save plan and show it in console with colors
+                    sh 'terraform plan -out=tfplan'
+                    sh 'terraform show tfplan'
+                }
             }
         }
 
         stage('Approval') {
             steps {
                 script {
-                    // Ask for manual approval
-                    input message: "Do you want to apply these changes?", ok: "Yes, Apply"
+                    // Wait for manual approval
+                    input message: "Do you want to apply these Terraform changes?", ok: "Yes, Apply"
                 }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                // Apply only after approval
-                sh 'terraform apply -auto-approve tfplan'
+                ansiColor('xterm') {
+                    sh 'terraform apply -auto-approve tfplan'
+                }
             }
         }
     }

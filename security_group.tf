@@ -1,7 +1,7 @@
 resource "aws_security_group" "jenkins" {
   name        = jenkins"
   description = "this security group created for jenkins server"
-  vpc_id      = "vpc-xxxxxxxx" # 🔹 replace with your VPC ID
+  vpc_id      = "aws_vpc.tpni.id" # 🔹 replace with your VPC ID
 
   # Inbound - allow everything
   ingress {

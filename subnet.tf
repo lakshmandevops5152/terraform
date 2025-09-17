@@ -42,7 +42,7 @@ resource "aws_internet_gateway" "devops_igw" {
 
 # Create Route Table
 resource "aws_route_table" "devops_rt" {
-  vpc_id = aws_vpc.devops_vpc.id
+  vpc_id = aws_vpc.tpni.id
 
   route {
     cidr_block = "0.0.0.0/0"

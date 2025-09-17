@@ -11,7 +11,7 @@ resource "aws_subnet" "devops_subnet1" {
 }
 
 resource "aws_subnet" "devops_subnet2" {
-  vpc_id                  = aaws_vpc.tpni.id
+  vpc_id                  = aws_vpc.tpni.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "ap-south-1b"
   map_public_ip_on_launch = true

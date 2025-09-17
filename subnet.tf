@@ -1,4 +1,4 @@
-/*
+
 
 # Create Subnets
 resource "aws_subnet" "devops-suvnet-1"
@@ -71,3 +71,4 @@ resource "aws_route_table_association" "a3" {
   subnet_id      = aws_subnet.devops-suvnet-3.id
   route_table_id = aws_route_table.evops-rt.id
 }
+

@@ -19,4 +19,4 @@ resource "aws_instance" "jenkins" {
   tags = {
     Name = "jenkins"
   }
-}
+

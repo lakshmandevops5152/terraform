@@ -4,7 +4,7 @@ resource "aws_instance" "jenkins" {
   ami                    = "" # Amazon Linux 2 AMI in ap-south-1
   instance_type          = "t2.micro"
   subnet_id              = "aws_subnet.devops_subnet1.id"# replace with your Subnet ID
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  vpc_security_group_ids = [aws_security_group.jenkins.id]
   key_name               = "Jenjins"
   root_block_device {
     volume_size = 20      # set root volume to 20 GB

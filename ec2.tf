@@ -3,7 +3,7 @@ resource "aws_instance" "jenkins" {
   ami                    = "mi-01b6d88af12965bb6" # Amazon Linux 2 AMI in ap-south-1
   ami                    = "" # Amazon Linux 2 AMI in ap-south-1
   instance_type          = "t2.micro"
-  subnet_id              = "subnet-xxxxxxxx" # replace with your Subnet ID
+  subnet_id              = "aws_subnet.devops_subnet1.id"# replace with your Subnet ID
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
   key_name               = "Jenjins"
   root_block_device {

@@ -33,7 +33,7 @@ resource "aws_subnet" "devops_subnet3" {
 
 # Create Internet Gateway
 resource "aws_internet_gateway" "devops_igw" {
-  vpc_id = ws_vpc.tpni.id
+  vpc_id = aws_vpc.tpni.id
 
   tags = {
     Name = "devops-igw"

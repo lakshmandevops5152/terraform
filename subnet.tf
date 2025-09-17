@@ -23,6 +23,7 @@ resource "aws_subnet" "devops_subnet2" {
 
 resource "aws_subnet" "devops_subnet3" {
   vpc_id                  = aws_vpc.tpni.id
+cidr_block              = "10.0.3.0/24"
   availability_zone       = "ap-south-1c"
   map_public_ip_on_launch = true
 

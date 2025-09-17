@@ -1,42 +1,39 @@
-
-
 # Create Subnets
-resource "aws_subnet" "devops-suvnet-1"
-subnet1" {
-  vpc_id                  = aws_vpc.my_vpc.id
+resource "aws_subnet" "devops_subnet1" {
+  vpc_id                  = aws_vpc.devops_vpc.id
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "ap-south-1a"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "devops-suvnet-1"
+    Name = "devops-subnet-1"
   }
 }
 
-resource "aws_subnet" "devops-subnet2" {
+resource "aws_subnet" "devops_subnet2" {
   vpc_id                  = aws_vpc.devops_vpc.id
   cidr_block              = "10.0.2.0/24"
   availability_zone       = "ap-south-1b"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "evops-subnet2
+    Name = "devops-subnet-2"
   }
 }
 
-resource "aws_subnet" "devops-subnet3" {
+resource "aws_subnet" "devops_subnet3" {
   vpc_id                  = aws_vpc.devops_vpc.id
   cidr_block              = "10.0.3.0/24"
   availability_zone       = "ap-south-1c"
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "evops-subnet3"
+    Name = "devops-subnet-3"
   }
 }
 
 # Create Internet Gateway
-resource "aws_internet_gateway" "devops-igw" {
+resource "aws_internet_gateway" "devops_igw" {
   vpc_id = aws_vpc.devops_vpc.id
 
   tags = {
@@ -45,30 +42,31 @@ resource "aws_internet_gateway" "devops-igw" {
 }
 
 # Create Route Table
-resource "aws_route_table" "devops-rt" {
+resource "aws_route_table" "devops_rt" {
   vpc_id = aws_vpc.devops_vpc.id
+
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.evops-igw".id
+    gateway_id = aws_internet_gateway.devops_igw.id
   }
 
   tags = {
     Name = "devops-rt"
   }
 }
+
 # Associate Subnets with Route Table
-resource "aws_route_table_association" "adevops-subnet-1" {
-  subnet_id      = aws_subnet.devops-suvnet-1.id
-  route_table_id = aws_route_table.evops-rt.id
+resource "aws_route_table_association" "devops_subnet1_assoc" {
+  subnet_id      = aws_subnet.devops_subnet1.id
+  route_table_id = aws_route_table.devops_rt.id
 }
 
-resource "aws_route_table_association" "devops-subnet-2" {
-  subnet_id      = aws_subnet.devops-suvnet-2.id
-  route_table_id = aws_route_table.evops-rt.id
+resource "aws_route_table_association" "devops_subnet2_assoc" {
+  subnet_id      = aws_subnet.devops_subnet2.id
+  route_table_id = aws_route_table.devops_rt.id
 }
 
-resource "aws_route_table_association" "a3" {
-  subnet_id      = aws_subnet.devops-suvnet-3.id
-  route_table_id = aws_route_table.evops-rt.id
+resource "aws_route_table_association" "devops_subnet3_assoc" {
+  subnet_id      = aws_subnet.devops_subnet3.id
+  route_table_id = aws_route_table.devops_rt.id
 }
-
